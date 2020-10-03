@@ -9,5 +9,6 @@ int main(int argc, char *argv[])
 	MyModel myModel;
 	tableView.setModel(&myModel);
 	tableView.show();
+
 	return a.exec();
 }
