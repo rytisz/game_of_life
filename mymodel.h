@@ -11,8 +11,11 @@ class MyModel : public QAbstractTableModel
 		int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 		int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-		int getNeighbours(const QModelIndex &index) const;
 
 	private:
 		bool isAlive[COLS][ROWS];
+		bool nextState[COLS][ROWS];
+
+		int getNeighbours(const int col, const int row) const;
+		void calculatetNextStates();
 };

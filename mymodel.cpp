@@ -32,7 +32,7 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
 
 	switch (role) {
 		case Qt::DisplayRole:
-			return QString("%1").arg(getNeighbours(index));
+			return QString("%1").arg(getNeighbours(col, row));
 		case Qt::BackgroundRole:
 			if (isAlive[col][row])
 				return QBrush(Qt::black);
@@ -43,11 +43,8 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-int MyModel::getNeighbours(const QModelIndex &index) const
+int MyModel::getNeighbours(const int col, const int row) const
 {
-	int col = index.column();
-	int row = index.row();
-
 	int count = 0;
 
 	printf("\ncell [%d %d]:", col, row);
@@ -76,4 +73,19 @@ int MyModel::getNeighbours(const QModelIndex &index) const
 	printf("\n\tcount %d\n", count);
 
 	return count;
+}
+
+void MyModel::calculatetNextStates()
+{
+	for (int i = 0; i < COLS; i++)
+		for (int j = 0; j < ROWS; j++) {
+			int n = getNeighbours(i, j);
+
+			if (n == 3)
+				nextState[i][j] = true;
+			else if (isAlive[i][j] && (n == 2))
+				nextState[i][j] = true;
+			else
+				nextState[i][j] = false;
+		}
 }
