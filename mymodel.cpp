@@ -15,6 +15,17 @@ MyModel::MyModel(QObject *parent)
 	(*currState)[3][2]= true;
 	(*currState)[3][3]= true;
 	(*currState)[4][2]= true;
+	calculatetNextStates();
+	swapStates();
+}
+
+void MyModel::swapStates()
+{
+	bool (*tmp)[COLS][ROWS];
+
+	tmp = currState;
+	currState = nextState;
+	nextState = tmp;
 }
 
 int MyModel::columnCount(const QModelIndex & /*parent*/) const
