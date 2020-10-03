@@ -1,20 +1,31 @@
 #include <qbrush.h>
 
 #include "mymodel.h"
+#include "debug.h"
 
 MyModel::MyModel(QObject *parent)
 	: QAbstractTableModel(parent)
 {
 	currState = &stateBuf1;
 	nextState = &stateBuf2;
+
 	for (int i = 0; i < COLS; i++)
 		for (int j = 0; j < ROWS; j++)
 			(*currState)[i][j] = false;
+
+	timer = new QTimer(this);
+	connect(timer, &QTimer::timeout, this, &MyModel::TimerSlot );
+	timer->start(100);
 
 	(*currState)[2][2]= true;
 	(*currState)[3][2]= true;
 	(*currState)[3][3]= true;
 	(*currState)[4][2]= true;
+
+}
+
+void MyModel::TimerSlot()
+{
 	calculatetNextStates();
 	swapStates();
 }
@@ -26,6 +37,10 @@ void MyModel::swapStates()
 	tmp = currState;
 	currState = nextState;
 	nextState = tmp;
+
+	QModelIndex topLeft = createIndex(0,0);
+	QModelIndex bottomRight = index(rowCount() - 1, columnCount() - 1);
+	emit dataChanged(topLeft, bottomRight);
 }
 
 int MyModel::columnCount(const QModelIndex & /*parent*/) const
@@ -60,7 +75,7 @@ int MyModel::getNeighbours(const int col, const int row) const
 {
 	int count = 0;
 
-	printf("\ncell [%d %d]:", col, row);
+	dprintf("\ncell [%d %d]:", col, row);
 	for (int i = -1; i <= 1; i++)
 		for (int j = -1; j <= 1; j++) {
 			if ((i == 0) && (j == 0))
@@ -69,7 +84,7 @@ int MyModel::getNeighbours(const int col, const int row) const
 			int nrow = row + i;
 			int ncol = col + j;
 
-			printf("\n\tneighbour [%d %d] ", ncol, nrow);
+			dprintf("\n\tneighbour [%d %d] ", ncol, nrow);
 
 			if ((ncol < 0) || (ncol >= COLS))
 				continue;
@@ -77,13 +92,11 @@ int MyModel::getNeighbours(const int col, const int row) const
 				continue;
 
 			if ((*currState)[ncol][nrow]) {
-				printf("alive");
+				dprintf("alive");
 				count++;
 			}
-			else
-				printf("dead");
 		}
-	printf("\n\tcount %d\n", count);
+	dprintf("\n\tcount %d\n", count);
 
 	return count;
 }

@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QTableView>
 #include <QHeaderView>
+#include <QTimer>
 
 #include "mymodel.h"
 

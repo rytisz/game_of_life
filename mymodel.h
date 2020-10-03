@@ -1,4 +1,5 @@
 #include <QAbstractTableModel>
+#include <QTimer>
 
 const int COLS = 300;
 const int ROWS = 300;
@@ -22,4 +23,9 @@ class MyModel : public QAbstractTableModel
 		int getNeighbours(const int col, const int row) const;
 		void calculatetNextStates();
 		void swapStates();
+
+		QTimer *timer;
+
+	private slots:
+		void TimerSlot();
 };
