@@ -5,9 +5,7 @@
 MyModel::MyModel(QObject *parent)
 	: QAbstractTableModel(parent)
 {
-	int i, j;
-
-	for (int i = 0; i < COLS ; i++)
+	for (int i = 0; i < COLS; i++)
 		for (int j = 0; j < ROWS; j++)
 			isAlive[i][j] = false;
 
