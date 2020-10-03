@@ -5,14 +5,16 @@
 MyModel::MyModel(QObject *parent)
 	: QAbstractTableModel(parent)
 {
+	currState = &stateBuf1;
+	nextState = &stateBuf2;
 	for (int i = 0; i < COLS; i++)
 		for (int j = 0; j < ROWS; j++)
-			isAlive[i][j] = false;
+			(*currState)[i][j] = false;
 
-	isAlive[2][2]= true;
-	isAlive[3][2]= true;
-	isAlive[3][3]= true;
-	isAlive[4][2]= true;
+	(*currState)[2][2]= true;
+	(*currState)[3][2]= true;
+	(*currState)[3][3]= true;
+	(*currState)[4][2]= true;
 }
 
 int MyModel::columnCount(const QModelIndex & /*parent*/) const
@@ -34,7 +36,7 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
 		case Qt::DisplayRole:
 			return QString("%1").arg(getNeighbours(col, row));
 		case Qt::BackgroundRole:
-			if (isAlive[col][row])
+			if ((*currState)[col][row])
 				return QBrush(Qt::black);
 			else
 				return QBrush(Qt::white);
@@ -63,7 +65,7 @@ int MyModel::getNeighbours(const int col, const int row) const
 			if ((nrow < 0) || (nrow >= ROWS))
 				continue;
 
-			if (isAlive[ncol][nrow]) {
+			if ((*currState)[ncol][nrow]) {
 				printf("alive");
 				count++;
 			}
@@ -82,10 +84,10 @@ void MyModel::calculatetNextStates()
 			int n = getNeighbours(i, j);
 
 			if (n == 3)
-				nextState[i][j] = true;
-			else if (isAlive[i][j] && (n == 2))
-				nextState[i][j] = true;
+				(*nextState)[i][j] = true;
+			else if ((*currState)[i][j] && (n == 2))
+				(*nextState)[i][j] = true;
 			else
-				nextState[i][j] = false;
+				(*nextState)[i][j] = false;
 		}
 }

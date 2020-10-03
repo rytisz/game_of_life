@@ -13,9 +13,13 @@ class MyModel : public QAbstractTableModel
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 	private:
-		bool isAlive[COLS][ROWS];
-		bool nextState[COLS][ROWS];
+		bool stateBuf1[COLS][ROWS];
+		bool stateBuf2[COLS][ROWS];
+
+		bool (*currState)[COLS][ROWS];
+		bool (*nextState)[COLS][ROWS];
 
 		int getNeighbours(const int col, const int row) const;
 		void calculatetNextStates();
+		void swapStates();
 };
