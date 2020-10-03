@@ -1,0 +1,9 @@
+.qmake.stash
+Makefile
+game_of_life
+main.o
+moc_mymodel.cpp
+moc_mymodel.o
+moc_predefs.h
+mymodel.o
+tags
