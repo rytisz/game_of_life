@@ -5,7 +5,7 @@
 #include <QTableView>
 #include <QTimer>
 
-#include "mymodel.h"
+#include "golmodel.h"
 
 void format_table(QTableView *tableView)
 {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	parser.process(a);
 	QString statePath = parser.value(startState);
 
-	MyModel myModel;
+	GOLModel myModel;
 
 	tableView.setModel(&myModel);
 	if (myModel.setCurrentState(statePath))

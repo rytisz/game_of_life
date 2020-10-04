@@ -4,10 +4,10 @@
 #include <fstream>
 #include <qbrush.h>
 
-#include "mymodel.h"
+#include "golmodel.h"
 #include "debug.h"
 
-MyModel::MyModel(QObject *parent)
+GOLModel::GOLModel(QObject *parent)
 	: QAbstractTableModel(parent)
 {
 	currState = &stateBuf1;
@@ -18,18 +18,18 @@ MyModel::MyModel(QObject *parent)
 			(*currState)[i][j] = false;
 
 	timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &MyModel::TimerSlot );
+	connect(timer, &QTimer::timeout, this, &GOLModel::TimerSlot );
 	timer->start(100);
 
 }
 
-void MyModel::TimerSlot()
+void GOLModel::TimerSlot()
 {
 	calculatetNextStates();
 	swapStates();
 }
 
-void MyModel::swapStates()
+void GOLModel::swapStates()
 {
 	bool (*tmp)[COLS][ROWS];
 
@@ -42,17 +42,17 @@ void MyModel::swapStates()
 	emit dataChanged(topLeft, bottomRight);
 }
 
-int MyModel::columnCount(const QModelIndex & /*parent*/) const
+int GOLModel::columnCount(const QModelIndex & /*parent*/) const
 {
 	return COLS;
 }
 
-int MyModel::rowCount(const QModelIndex & /*parent*/) const
+int GOLModel::rowCount(const QModelIndex & /*parent*/) const
 {
 	return ROWS;
 }
 
-QVariant MyModel::data(const QModelIndex &index, int role) const
+QVariant GOLModel::data(const QModelIndex &index, int role) const
 {
 	int col = index.column();
 	int row = index.row();
@@ -70,7 +70,7 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-int MyModel::getNeighbours(const int col, const int row) const
+int GOLModel::getNeighbours(const int col, const int row) const
 {
 	int count = 0;
 
@@ -100,7 +100,7 @@ int MyModel::getNeighbours(const int col, const int row) const
 	return count;
 }
 
-void MyModel::calculatetNextStates()
+void GOLModel::calculatetNextStates()
 {
 	for (int i = 0; i < COLS; i++)
 		for (int j = 0; j < ROWS; j++) {
@@ -115,7 +115,7 @@ void MyModel::calculatetNextStates()
 		}
 }
 
-int MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
+int GOLModel::readState(const QString path, bool (*state)[COLS][ROWS])
 {
 	memset(*state, 0, COLS * ROWS * sizeof(bool));
 
@@ -141,7 +141,7 @@ int MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
 	return 0;
 }
 
-int MyModel::setCurrentState(const QString file)
+int GOLModel::setCurrentState(const QString file)
 {
 	return readState(file, currState);
 }
