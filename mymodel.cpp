@@ -1,3 +1,4 @@
+#include <QCoreApplication>
 #include <QFile>
 #include <QTextStream>
 #include <fstream>
@@ -19,6 +20,7 @@ MyModel::MyModel(QObject *parent)
 	timer = new QTimer(this);
 	connect(timer, &QTimer::timeout, this, &MyModel::TimerSlot );
 	timer->start(100);
+
 }
 
 void MyModel::TimerSlot()
@@ -117,12 +119,13 @@ int MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
 {
 	memset(*state, 0, COLS * ROWS * sizeof(bool));
 
-	QFile file(path);
+	QFile file(QCoreApplication::applicationDirPath() + "/" + path);
+	if (!file.open(QFile::ReadOnly | QFile::Text)) {
+		return -1;
+	}
+
 	QString line;
 	int j = 0;
-
-	if (!file.open(QFile::ReadOnly | QFile::Text))
-		return -1;
 
 	QTextStream in(&file);
 
@@ -131,7 +134,7 @@ int MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
 		for (int i = 0; i < line.length(); i++)
 		{
 			if (line.at(i) == 'x')
-				(*state)[i][j] = true;
+				(*state)[i + COLS / 2][j + ROWS / 2] = true;
 		}
 		j++;
 	}

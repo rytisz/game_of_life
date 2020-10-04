@@ -36,11 +36,11 @@ int main(int argc, char *argv[])
 	MyModel myModel;
 
 	tableView.setModel(&myModel);
-
 	if (myModel.setCurrentState(statePath))
 		myModel.setCurrentState("patterns/penta-decathlon");
 
 	format_table(&tableView);
+	tableView.scrollTo(myModel.index(COLS/2, ROWS/2));
 
 	tableView.show();
 
