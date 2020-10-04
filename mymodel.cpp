@@ -59,7 +59,7 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
 
 	switch (role) {
 		case Qt::DisplayRole:
-			return QString("%1").arg(getNeighbours(col, row));
+			return QString("");
 		case Qt::BackgroundRole:
 			if ((*currState)[col][row])
 				return QBrush(Qt::black);
@@ -124,10 +124,10 @@ int MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
 		return -1;
 	}
 
-	QString line;
-	int j = 0;
-
 	QTextStream in(&file);
+	QString line;
+
+	int j = 0;
 
 	while (!in.atEnd()) {
 		line = in.readLine();
