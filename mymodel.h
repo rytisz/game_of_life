@@ -12,7 +12,7 @@ class MyModel : public QAbstractTableModel
 		int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 		int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-		void readState(const QString path, bool (*state)[COLS][ROWS]);
+		int setCurrentState(const QString file);
 
 	private:
 		bool stateBuf1[COLS][ROWS];
@@ -24,6 +24,8 @@ class MyModel : public QAbstractTableModel
 		int getNeighbours(const int col, const int row) const;
 		void calculatetNextStates();
 		void swapStates();
+
+		int readState(const QString path, bool (*state)[COLS][ROWS]);
 
 		QTimer *timer;
 

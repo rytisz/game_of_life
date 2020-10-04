@@ -1,6 +1,8 @@
 #include <QApplication>
-#include <QTableView>
+#include <QCommandLineOption>
+#include <QCommandLineParser>
 #include <QHeaderView>
+#include <QTableView>
 #include <QTimer>
 
 #include "mymodel.h"
@@ -22,8 +24,22 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 	QTableView tableView;
 
+	QCommandLineParser parser;
+	QCommandLineOption startState(QStringList() << "s" << "start-state",
+			QCoreApplication::translate("main", "set starting state defined at <file>."),
+			QCoreApplication::translate("main", "file"));
+	parser.addOption(startState);
+
+	parser.process(a);
+	QString statePath = parser.value(startState);
+
 	MyModel myModel;
+
 	tableView.setModel(&myModel);
+
+	if (myModel.setCurrentState(statePath))
+		myModel.setCurrentState("patterns/penta-decathlon");
+
 	format_table(&tableView);
 
 	tableView.show();

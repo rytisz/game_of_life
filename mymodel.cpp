@@ -19,8 +19,6 @@ MyModel::MyModel(QObject *parent)
 	timer = new QTimer(this);
 	connect(timer, &QTimer::timeout, this, &MyModel::TimerSlot );
 	timer->start(100);
-
-	readState("patterns/penta-decathlon", currState);
 }
 
 void MyModel::TimerSlot()
@@ -115,7 +113,7 @@ void MyModel::calculatetNextStates()
 		}
 }
 
-void MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
+int MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
 {
 	memset(*state, 0, COLS * ROWS * sizeof(bool));
 
@@ -124,7 +122,7 @@ void MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
 	int j = 0;
 
 	if (!file.open(QFile::ReadOnly | QFile::Text))
-		return;
+		return -1;
 
 	QTextStream in(&file);
 
@@ -137,4 +135,10 @@ void MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
 		}
 		j++;
 	}
+	return 0;
+}
+
+int MyModel::setCurrentState(const QString file)
+{
+	return readState(file, currState);
 }
