@@ -1,3 +1,6 @@
+#include <QFile>
+#include <QTextStream>
+#include <fstream>
 #include <qbrush.h>
 
 #include "mymodel.h"
@@ -17,11 +20,7 @@ MyModel::MyModel(QObject *parent)
 	connect(timer, &QTimer::timeout, this, &MyModel::TimerSlot );
 	timer->start(100);
 
-	(*currState)[2][2]= true;
-	(*currState)[3][2]= true;
-	(*currState)[3][3]= true;
-	(*currState)[4][2]= true;
-
+	readState("patterns/penta-decathlon", currState);
 }
 
 void MyModel::TimerSlot()
@@ -114,4 +113,28 @@ void MyModel::calculatetNextStates()
 			else
 				(*nextState)[i][j] = false;
 		}
+}
+
+void MyModel::readState(const QString path, bool (*state)[COLS][ROWS])
+{
+	memset(*state, 0, COLS * ROWS * sizeof(bool));
+
+	QFile file(path);
+	QString line;
+	int j = 0;
+
+	if (!file.open(QFile::ReadOnly | QFile::Text))
+		return;
+
+	QTextStream in(&file);
+
+	while (!in.atEnd()) {
+		line = in.readLine();
+		for (int i = 0; i < line.length(); i++)
+		{
+			if (line.at(i) == 'x')
+				(*state)[i][j] = true;
+		}
+		j++;
+	}
 }

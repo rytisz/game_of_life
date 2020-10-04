@@ -12,6 +12,7 @@ class MyModel : public QAbstractTableModel
 		int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 		int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+		void readState(const QString path, bool (*state)[COLS][ROWS]);
 
 	private:
 		bool stateBuf1[COLS][ROWS];
