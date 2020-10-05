@@ -18,9 +18,8 @@ GOLModel::GOLModel(QObject *parent)
 			(*currState)[i][j] = false;
 
 	timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &GOLModel::TimerSlot );
+	connect(timer, &QTimer::timeout, this, &GOLModel::TimerSlot);
 	timer->start(100);
-
 }
 
 void GOLModel::TimerSlot()
@@ -37,7 +36,7 @@ void GOLModel::swapStates()
 	currState = nextState;
 	nextState = tmp;
 
-	QModelIndex topLeft = createIndex(0,0);
+	QModelIndex topLeft = createIndex(0, 0);
 	QModelIndex bottomRight = index(rowCount() - 1, columnCount() - 1);
 	emit dataChanged(topLeft, bottomRight);
 }
@@ -144,4 +143,14 @@ int GOLModel::readState(const QString path, bool (*state)[COLS][ROWS])
 int GOLModel::setCurrentState(const QString file)
 {
 	return readState(file, currState);
+}
+
+bool GOLModel::statesMatch()
+{
+	for (int i = 0; i < COLS; i++)
+		for (int j = 0; j < ROWS; j++)
+			if (stateBuf1[i][j] != stateBuf2[i][j])
+				return false;
+
+	return true;
 }

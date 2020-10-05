@@ -13,6 +13,9 @@ class GOLModel : public QAbstractTableModel
 		int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 		int setCurrentState(const QString file);
+		bool statesMatch();
+		void calculatetNextStates();
+		void swapStates();
 
 	private:
 		bool stateBuf1[COLS][ROWS];
@@ -22,8 +25,6 @@ class GOLModel : public QAbstractTableModel
 		bool (*nextState)[COLS][ROWS];
 
 		int getNeighbours(const int col, const int row) const;
-		void calculatetNextStates();
-		void swapStates();
 
 		int readState(const QString path, bool (*state)[COLS][ROWS]);
 
